@@ -13,18 +13,28 @@ KnowledgeGraphEmbedding
         :target: https://knowledge-graph-embedding.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-
-
-
-Python Boilerplate contains all the boilerplate you need to create a Python package.
-
-
 * Free software: MIT license
 * Documentation: https://knowledge-graph-embedding.readthedocs.io.
 
+Description
+---------
+KnowledgeGraphEmbedding project contains whole procedure all graph embedding which contains :
+    1. Fetch relate data described in data.
+    #. ETL
+    #. Build Model
+    #. Evaluate Model Performance
+
+Directory
+________
+- .data/
+ - ../ori : contains all zipped dataset files.
+ - ../FB15K : files zipped from ori/fb15k.tgz.
+ - ../FB15K_ETL : files after ETL process.
 
 Features
 --------
+
+
 
 * TODO
 
