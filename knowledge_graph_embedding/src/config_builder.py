@@ -15,10 +15,12 @@ class ConfigBuilder(object):
         self.ent_total_num = None  # Number of all entities
         self.rel_total_num = None  # Number of all relations
         self.batch_size = None  # Batch size
-        self.batch_seq_size = None # TODO
+        self.batch_seq_size = None  # TODO
         self.optimizer = None  # Choice of optimizer
         self.lr = None
         self.lr_decay = None
-
-
-        pass
+        self.margin = None  # Margin γ
+        self.embedding_dim = None  # Dimension of embedding
+        self.corrupt_sample_size = 10  # Num of corrupted triplet generated.
+        self.corrupt_sample_num = 1  # Num of corrupted used. Default 1 in paper.
+        self.dataset = None  # DataSet
