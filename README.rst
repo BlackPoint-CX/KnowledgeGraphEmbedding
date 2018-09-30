@@ -18,6 +18,7 @@ KnowledgeGraphEmbedding
 
 Description
 ---------
+
 KnowledgeGraphEmbedding project contains whole procedure all graph embedding which contains :
     1. Fetch relate data described in data.
     #. ETL
