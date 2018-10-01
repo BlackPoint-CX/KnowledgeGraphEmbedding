@@ -52,6 +52,12 @@ class TransBase(object):
     def add_placeholder_op(self):
         pass
 
+    def add_loss_op(self):
+        pass
+
+    def add_embedding_op(self):
+        pass
+
     def add_train_op(self):
         with tf.variable_scope('train_step'):
             _optimizer = self.config.optimizer.lower()
@@ -98,5 +104,25 @@ class TransBase(object):
                     self.logger.info()
                     break
 
-    def evaluate(self, test):
-        pass
+    def evaluate(self, val):
+        total_rank = 0
+        total_hits_at_10 = 0
+        val_len = len(val)
+        for records in val:
+            for record in records:
+                score_list = []
+                ((ori_h, ori_r, ori_t), (cor_h, cor_r, cor_t)) = record
+                for i in range(self.config.ent_total_num):
+                    if i != ori_h:
+                        cor_score = self.score(i, ori_r, ori_t)
+                        score_list.append(('cor', cor_score))
+                ori_score = self.score(ori_h, ori_r, ori_t)
+                score_list.append(('ori', ori_score))
+                sorted_score_list = sorted(score_list, key=lambda r: r[1], reverse=True)
+                index = sorted_score_list.index(('ori', ori_score)) + 1  # index start from i since hits@10 start with 1
+                total_rank += index
+                if index <= 10:
+                    total_hits_at_10 += 1
+        mean_rank = total_rank / val_len
+        hits_at_10 = total_hits_at_10 / val_len
+        return {'MeanRank': mean_rank, 'Hits@10': hits_at_10}
