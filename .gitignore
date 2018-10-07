@@ -103,4 +103,4 @@ ENV/
 
 # BlackPoint_Config
 virtualenv/
-#knowledge_graph_embedding/src/summary/
+knowledge_graph_embedding/src/summary/
