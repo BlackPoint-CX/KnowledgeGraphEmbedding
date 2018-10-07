@@ -41,13 +41,13 @@ class DataManagerE(object):
                 id_list.remove(h)
                 id_list.append(random.choice(range(self.config.ent_total_num)))
             for id in id_list:
-                corrupt_list.append(((h, r, t), (id, r, t)))
+                corrupt_list.append([(h, r, t), (id, r, t)])
         elif mode == 't':  # Remove Tail Entity
             while t in id_list:
-                id_list.remove(h)
+                id_list.remove(t)
                 id_list.append(random.choice(range(self.config.ent_total_num)))
             for id in id_list:
-                corrupt_list.append(((h, r, t), (h, r, id)))
+                corrupt_list.append([(h, r, t), (h, r, id)])
         assert len(corrupt_list) == size
         return corrupt_list
 
@@ -57,23 +57,24 @@ class DataManagerE(object):
         :param ori_triplet: (h,r,t) record
         :return: #corrput_sample_num of (ori_triplet, corrupted_triplet)
         """
-        h, r, t = ori_triplet
+        h, r, t = map(int,ori_triplet)
         replace_h_num = self.config.corrupt_sample_size // 2  # Num of (h', r, t)
         replace_t_num = self.config.corrupt_sample_size - replace_h_num  # Num of (h, r, t')
         replace_h_list = self.build_corrupt(h, r, t, 'h', replace_h_num)
         replace_t_list = self.build_corrupt(h, r, t, 't', replace_t_num)
+        # print(replace_h_list)
+        # print(replace_t_list)
         corrupt_list = []
         corrupt_list.extend(replace_h_list)
         corrupt_list.extend(replace_t_list)
         del replace_h_list
         del replace_t_list
         assert len(corrupt_list) == self.config.corrupt_sample_size
-        return random.choices(corrupt_list, k=self.config.corrupt_sample_num)
+        # return random.choices(corrupt_list, k=self.config.corrupt_sample_num) # TODO choices func since python3.6
+        result = random.choice(corrupt_list)
+        return result
 
     def __iter__(self):
-        return self
-
-    def __next__(self):
         if self.config.shuffle:
             data = deepcopy(self.data)
             random.shuffle(data)
@@ -82,40 +83,13 @@ class DataManagerE(object):
         batch_data = []
         for ori_triplet in data:
             triplet_with_corrput = self.combine_with_corrupt(ori_triplet)
-            for triplet in triplet_with_corrput:
-                batch_data.append(triplet)
-                if len(batch_data) == self.config.batch_size:
-                    yield batch_data
-                    batch_data.clear()
+
+            batch_data.append(triplet_with_corrput)
+            if len(batch_data) == self.config.batch_size:
+                yield batch_data
+                batch_data.clear()
         if batch_data:
             yield batch_data
 
     def __len__(self):
         return len(self.data)
-
-
-# class Config(object):
-#     def __init__(self):
-#         self.corrupt_sample_size = 10  # Num of corrupted triplet generated.
-#         self.corrupt_sample_num = 1  # Num of corrupted used. Default 1 in paper.
-#         self.dataset = None  # DataSet
-#         self.batch_size = 10
-#         self.shuffle = False
-#         self.ent_total_num = 14951
-#         self.rel_total_num = 1345
-
-
-# Something test
-#
-# file_path = '/Users/chenxiang/PycharmProjects/knowledge_graph_embedding/knowledge_graph_embedding/data/FB15k_ETL/train2id.txt'
-# c = Config()
-# datamanager_e = DataManagerE(file=file_path, config=c)
-
-
-#
-# dataset_e = TextLineDataset(file_path)
-# iterator = dataset_e.make_one_shot_iterator()
-# next_value = iterator.get_next()
-#
-# sess = tf.Session()
-# print(sess.run(next_value))

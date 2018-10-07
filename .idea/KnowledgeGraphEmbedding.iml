@@ -7,8 +7,9 @@
       <sourceFolder url="file://$MODULE_DIR$/knowledge_graph_embedding/src/etl_process" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/knowledge_graph_embedding/src/project_config" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/knowledge_graph_embedding/src/transE" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/knowledge_graph_embedding/TransE" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.5.2 virtualenv at ~/VirtualEnvs/tensorflow0627" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="virtualenv_nmt" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">
